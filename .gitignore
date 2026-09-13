@@ -1,2 +1,7 @@
-*.vscode*
 .vscode
+.pytest_cache
+AGENTS.md
+conversation.json
+memory.json
+docs/rocky.Modelfile
+tests
