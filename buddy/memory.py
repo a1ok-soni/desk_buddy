@@ -37,15 +37,30 @@ def remember(content: str, memory_type: str) -> str:
     """
 
     memories = recall()
+    memory = {"content": content, "type": memory_type}
 
-    memory = {
-        "content": content,
-        "type": memory_type
-    }
+    if memory not in memories:
+        memories.append(memory)
 
-    memories.append(memory)
+        with open(MEMORY_FILE, "w") as f:
+            json.dump(memories, f, indent=2)
 
-    with open(MEMORY_FILE, "w") as f:
-        json.dump(memories, f, indent=2)
+        return f"Memory stored: {content}"
 
-    return f"Memory stored: {content}"
+    return f"Memory already exists: {content}"
+
+
+def forget(to_remove):
+    memories = recall()
+
+    for memory in memories:
+        if memory["content"]:
+            if to_remove in memory["content"]:
+                memories.remove(memory)
+
+                with open(MEMORY_FILE, "w") as f:
+                    json.dump(memories, f, indent=2)
+                return f"Memory removed: {to_remove}"
+        
+    else:
+        return f"Memory not found: {to_remove}"

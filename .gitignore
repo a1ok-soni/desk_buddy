@@ -1,7 +1,12 @@
+# cache
 .vscode
 .pytest_cache
+buddy/__pycache__
+
+tests
+
+# personal files
 AGENTS.md
 conversation.json
 memory.json
 docs/rocky.Modelfile
-tests
