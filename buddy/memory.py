@@ -26,14 +26,18 @@ def recall():
 
 def remember(content: str, memory_type: str) -> str:
     """
-    Store an important piece of information in Buddy's long-term memory.
+    Store a NEW long-term memory.
+
+    Use this tool ONLY when the user explicitly asks you to remember
+    something or provides information that should be saved for future
+    conversations.
+
+    Do NOT use this tool when the user asks what you already remember.
+    Use get_memories for that.
 
     Args:
-        content: The information that should be remembered.
-        memory_type: The category of the memory, such as preference, personal, or project.
-
-    Returns:
-        A confirmation that the memory was stored.
+        content: The specific fact to store.
+        memory_type: The category of the memory.
     """
 
     memories = recall()
@@ -61,6 +65,18 @@ def forget(to_remove):
                 with open(MEMORY_FILE, "w") as f:
                     json.dump(memories, f, indent=2)
                 return f"Memory removed: {to_remove}"
-        
+
     else:
         return f"Memory not found: {to_remove}"
+
+
+def get_memories():
+    """
+    Retrieve existing long-term memories.
+
+    Use this tool when the user asks what you remember, what you know
+    about them, or asks to see/list their stored memories.
+
+    This tool does NOT create or modify memories.
+    """
+    return json.dumps(recall())

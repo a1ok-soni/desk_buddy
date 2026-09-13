@@ -1,11 +1,12 @@
 import ollama
 
 from buddy.memory import (
+    get_memories,
     load_conversation,
     save_conversation,
     recall,
     remember,
-    forget
+    forget,
 )
 
 
@@ -22,7 +23,9 @@ def main() -> None:
         memories = recall()
 
         if memories:
-            memory_context = "\n\nStored memories:\n" + "\n".join(f"- {memory['content']}" for memory in memories)
+            memory_context = "\n\nStored memories:\n" + "\n".join(
+                f"- {memory['content']}" for memory in memories
+            )
 
         messages.append({"role": "user", "content": user_input})
 
@@ -30,13 +33,16 @@ def main() -> None:
             {
                 "role": "system",
                 "content": (
-                    "Use the following stored memories when relevant. " "Do not invent memories." + memory_context
+                    "Use the following stored memories when relevant. "
+                    "Do not invent memories." + memory_context
                 ),
             },
             *messages,
         ]
 
-        response = ollama.chat(model="rocky", messages=messages_for_model, tools=[remember, forget])
+        response = ollama.chat(
+            model="rocky", messages=messages_for_model, tools=[remember, forget, get_memories]
+        )
 
         # Check if the model wants to call a tool.
         if response.message.tool_calls:
@@ -77,10 +83,18 @@ def main() -> None:
                         }
                     )
 
+                elif tool_call.function.name == "get_memories":
+                    result = get_memories()
+                    messages_for_model.append(
+                        {
+                            "role": "tool",
+                            "content": result,
+                        }
+                    )
 
             # Ask Buddy for the final response after
             # the tool has executed.
-            final_response = ollama.chat(model="rocky", messages=messages_for_model, tools=[remember, forget])
+            final_response = ollama.chat(model="rocky", messages=messages_for_model)
             content = final_response.message.content
 
         else:
