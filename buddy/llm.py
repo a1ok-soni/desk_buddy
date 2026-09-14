@@ -9,6 +9,8 @@ from buddy.memory import (
     forget,
 )
 
+from buddy.personality import PERSONALITY
+
 
 def main() -> None:
     messages = load_conversation()
@@ -33,7 +35,7 @@ def main() -> None:
             {
                 "role": "system",
                 "content": (
-                    "Use the following stored memories when relevant. "
+                    PERSONALITY + "Use the following stored memories when relevant. "
                     "Do not invent memories." + memory_context
                 ),
             },
