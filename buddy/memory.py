@@ -55,6 +55,16 @@ def remember(content: str, memory_type: str) -> str:
 
 
 def forget(to_remove):
+    """
+    Remove an existing long-term memory that matches the given text.
+
+    Use this tool ONLY when the user explicitly asks you to forget
+    or remove something you previously remembered.
+
+    Args:
+        to_remove: Text to match against stored memory content. Any
+            memory containing this text will be deleted.
+    """
     memories = recall()
 
     for memory in memories:

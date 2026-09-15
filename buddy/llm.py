@@ -10,6 +10,8 @@ from buddy.memory import (
 )
 
 from buddy.personality import PERSONALITY
+from buddy.voice import speak
+from buddy.listen import listen
 
 
 def main() -> None:
@@ -17,9 +19,9 @@ def main() -> None:
 
     while True:
         memory_context = ""
-        user_input = input("You: ")
+        user_input = listen()
 
-        if user_input.lower() in ["exit", "quit"]:
+        if user_input.lower() in ["exit", "quit" ,"exit.", "quit."]:
             break
 
         memories = recall()
@@ -103,6 +105,7 @@ def main() -> None:
             content = response.message.content
 
         print(f"Rocky: {content}")
+        speak(content)
         messages.append({"role": "assistant", "content": content})
         save_conversation(messages)
 
